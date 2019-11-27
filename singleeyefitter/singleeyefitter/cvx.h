@@ -4,7 +4,7 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/core/core_c.h>
 #include <opencv2/imgproc/imgproc.hpp>
-
+#define CV_AA cv::LINE_AA
 namespace singleeyefitter {
 
 const double SQRT_2 = std::sqrt(2.0);
