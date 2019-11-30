@@ -31,7 +31,7 @@
  * @author Daniel Pustka <daniel.pustka@in.tum.de>
  */
 
-#include <objbase.h>
+//#include <objbase.h>
 
 #include <mutex>
 #include <thread>

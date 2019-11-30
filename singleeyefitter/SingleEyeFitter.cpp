@@ -3,7 +3,7 @@
 
 #include <boost/math/special_functions/sign.hpp>
 
-#include <Eigen/StdVector>
+#include <eigen3/Eigen/StdVector>
 
 #include <ceres/ceres.h>
 #include <ceres/problem.h>

@@ -3,7 +3,9 @@
 
 #include <string>
 #include <opencv2/highgui/highgui.hpp>
-#include "DirectShowFrameGrabber.h"
+#include <opencv2/opencv.hpp>
+#include <math.h>
+//#include "DirectShowFrameGrabber.h"
 
 namespace eye_tracker
 {
@@ -28,7 +30,7 @@ public:
 	void fetchFrame(cv::Mat &frame);
 protected:
 private:
-	Ubitrack::Drivers::DirectShowFrameGrabber DSfg;
+	//Ubitrack::Drivers::DirectShowFrameGrabber DSfg;
 };
 
 /**

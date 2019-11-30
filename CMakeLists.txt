@@ -7,13 +7,13 @@ set(CMAKE_INSTALL_PREFIX "./install")
 
 # Your custom paths to Boost and OpenCV libraries
 set(BOOST_ROOT "/usr/include/boost")
-set(OpenCV_DIR "/home/noelprince/opencv/build")
+set(OpenCV_DIR "/usr/include/opencv")
 
 # Bundled external libraries
-set(CMAKE_PREFIX_PATH  "${PROJECT_SOURCE_DIR}/external/Ceres-1.11/CMake")
+#set(CMAKE_PREFIX_PATH  "${PROJECT_SOURCE_DIR}/external/Ceres-1.11/CMake")
 set(SPII_INSTALL_DIR   "${PROJECT_SOURCE_DIR}/external/spii-3.0.0")
-set(EIGEN_INCLUDE_DIR  "${PROJECT_SOURCE_DIR}/external/Eigen-3.2.7")
-set(EIGEN3_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/external/Eigen-3.2.7")
+#set(EIGEN_INCLUDE_DIR  "${PROJECT_SOURCE_DIR}/external/Eigen-3.2.7")
+#set(EIGEN3_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/external/Eigen-3.2.7")
 
 
 
@@ -53,7 +53,7 @@ ENDIF (CMAKE_SIZEOF_VOID_P EQUAL 8)
 #find_package ( Boost 1.58 COMPONENTS filesystem system timer REQUIRED )
 find_package ( Boost 1.62 COMPONENTS filesystem system timer thread date_time chrono regex serialization REQUIRED )
 find_package ( OpenCV REQUIRED )
-#find_package ( TBB REQUIRED )
+find_package ( TBB REQUIRED )
 find_package ( Eigen3 REQUIRED )
 find_package (Ceres REQUIRED)
 
@@ -76,7 +76,7 @@ else()
 endif()
 message(STATUS "spii_LIBRARIES:\"${spii_LIBRARIES}\"")
 # copy dll
-file(COPY ${SPII_INSTALL_DIR}/bin/spii.dll DESTINATION ${PROJECT_BINARY_DIR}/main)
+#file(COPY ${SPII_INSTALL_DIR}/bin/spii.dll DESTINATION ${PROJECT_BINARY_DIR}/main)
 
 # copy OpenCV dlls
 file(GLOB OPENCV_DLLS

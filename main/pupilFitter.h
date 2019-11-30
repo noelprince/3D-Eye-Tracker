@@ -71,7 +71,9 @@ bool pupilAreaFitRR(Mat &gray, RotatedRect &rr, vector<Point2f> &allPtsReturn,
 		darkestPixelConfirm = correctBounds(darkestPixelConfirm, size);
 
 		//find darkest pixel (for thresholding
-		int darkestPixel = getDarkestPixelBetter(gray(cv::Rect(darkestPixelConfirm.x, darkestPixelConfirm.y, size, size)));
+		cv::Rect temp = cv::Rect(darkestPixelConfirm.x, darkestPixelConfirm.y, size, size);
+		cv::Mat temp2 = gray(temp);
+		int darkestPixel = getDarkestPixelBetter(temp2);
 
 		int kernel_size = 3;
 		int scale = 1;

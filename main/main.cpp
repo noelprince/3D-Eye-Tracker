@@ -101,7 +101,7 @@ int main(int argc, char *argv[]){
 
 	
 	//// Camera intrinsic parameters
-	std::string calib_path="../../docs/cameraintrinsics_eye.txt";
+	std::string calib_path="../docs/cameraintrinsics_eye.txt";
 	eye_tracker::UbitrackTextReader<eye_tracker::Caib> ubitrack_calib_text_reader;
 	if (ubitrack_calib_text_reader.read(calib_path) == false){
 		std::cout << "Calibration file onpen error: " << calib_path << std::endl;

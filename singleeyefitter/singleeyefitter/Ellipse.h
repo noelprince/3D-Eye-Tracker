@@ -86,8 +86,8 @@ namespace singleeyefitter {
 
         static const Ellipse2D Null;
 
-		template<typename T>
-		double similarity(const Ellipse2D<T>& e, double sig_pow2 = 1.0) {
+		template<typename U>
+		double similarity(const Ellipse2D<U>& e, double sig_pow2 = 1.0) {
 			const double kAngleSig = 5.0 / 180.0*boost::math::double_constants::pi;
 			
 //			std::cout << "E1: " << e.minor_radius << " " << e.major_radius << " " << e.angle << std::endl;

@@ -270,12 +270,12 @@ void record_eyecams(){
 
 void test_eyecam(){
 
-#if 0
-	Ubitrack::Drivers::DirectShowFrameGrabber DSfg0("Pupil Cam1 ID0");
-	DSfg0.start();
-	while (cv::waitKey(5) != 'q');
-	return;
-#endif
+// #if 0
+// 	Ubitrack::Drivers::DirectShowFrameGrabber DSfg0("Pupil Cam1 ID0");
+// 	DSfg0.start();
+// 	while (cv::waitKey(5) != 'q');
+// 	return;
+// #endif
 	EyeCamera eyecamL(0);
 	EyeCamera eyecamR(2);
 	EyeCamera eyecamW(1);
@@ -388,18 +388,18 @@ void EyeCamera::fetchFrame(cv::Mat &frame){
 
 
 EyeCameraDS::EyeCameraDS(std::string cam_name)
-	: DSfg(cam_name)
+	//: DSfg(cam_name)
 {
-	DSfg.start();
+	//DSfg.start();
 }
 EyeCameraDS::~EyeCameraDS(){
-	DSfg.stop();
+	//DSfg.stop();
 }
 bool EyeCameraDS::isOpened(){
 	return true;
 }
 void EyeCameraDS::fetchFrame(cv::Mat &frame){
-	DSfg.getFrame(frame);
+	//DSfg.getFrame(frame);
 }
 
 

@@ -4,6 +4,8 @@
 #include <iostream>
 #include <boost/range.hpp>
 #include <Eigen/Core>
+#include <cmath>
+#include <math.h>
 
 namespace singleeyefitter {
 
@@ -112,7 +114,7 @@ public:
 template<typename Scalar>
 std::pair<Eigen::Matrix<Scalar, 3, 1>, Eigen::Matrix<Scalar, 3, 1>> intersect(const Eigen::ParametrizedLine<Scalar, 3>& line, const Sphere<Scalar>& sphere) {
     using std::sqrt;
-    using math::sq;
+    //using math::sq;
 
     typedef typename Eigen::ParametrizedLine<Scalar, 3>::VectorType Vector;
 	
@@ -128,7 +130,7 @@ std::pair<Eigen::Matrix<Scalar, 3, 1>, Eigen::Matrix<Scalar, 3, 1>> intersect(co
     Scalar r = sphere.radius;
 
     // From Wikipedia :)
-    Scalar vcvc_cc_rr = sq(v.dot(c)) - c.dot(c) + sq(r);
+    Scalar vcvc_cc_rr = pow(v.dot(c), 2) - c.dot(c) + pow(r, 2);
     if (vcvc_cc_rr < 0) {
         throw no_intersection_exception(line, sphere);
     }

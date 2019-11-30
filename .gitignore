@@ -7,6 +7,21 @@
 *.userosscache
 *.sln.docstates
 
+
+#Cmakeartifacts
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+main/cmake_install.cmake
+
+#Executables
+main/main
+
+#Static Libraries
+singleeyefitter/libsingleeyefitter.a
+
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 

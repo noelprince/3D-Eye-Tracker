@@ -14,14 +14,14 @@ include_directories (
 
 file (GLOB SRCS 
   "*.cpp" 
-  "../external/DirectShowFrameGrabber/*.cpp"
-  "../external/DirectShowFrameGrabber/*.c"
-  # "external/DirectShowFrameGrabber/*.idl"pupillabs
+#  "../external/DirectShowFrameGrabber/*.cpp"
+#  "../external/DirectShowFrameGrabber/*.c"
+#  # "external/DirectShowFrameGrabber/*.idl"pupillabs
   )
 
 file (GLOB HEADERS 
   *.h *.hpp 
-  "../external/DirectShowFrameGrabber/*.h"
+#  "../external/DirectShowFrameGrabber/*.h"
   )
 
 
