@@ -10,7 +10,8 @@
 #include <vector>
 #include <string>
 #include <sstream>
-
+#include <unistd.h>
+#define GetCurrentDir getcwd
 
 #include "ubitrack_util.h" // claibration file handlers
 #include <boost/foreach.hpp>
@@ -42,6 +43,13 @@ enum InputMode { CAMERA, CAMERA_MONO, VIDEO, IMAGE };
 
 }
 
+std::string GetCurrentWorkingDir( void ) {
+  char buff[FILENAME_MAX];
+  GetCurrentDir( buff, FILENAME_MAX );
+  std::string current_working_dir(buff);
+  return current_working_dir;
+};
+
 
 int main(int argc, char *argv[]){
 	
@@ -52,14 +60,15 @@ int main(int argc, char *argv[]){
 	kVisualization = true;
 
 	InputMode input_mode =
-		//InputMode::VIDEO;  // Set a video as a video source
+		InputMode::VIDEO;  // Set a video as a video source
         // InputMode::CAMERA; // Set two cameras as video sources
-		 InputMode::CAMERA_MONO; // Set a camera as video sources
+		//InputMode::CAMERA_MONO; // Set a camera as video sources
 	    // InputMode::IMAGE;// Set an image as a video source
 
 
 	////// Command line opitions /////////////
-	std::string kDir = "C:/Users/Yuta/Dropbox/work/Projects/20150427_Alex_EyeTracker/";
+	std::string kDir = GetCurrentWorkingDir();
+	std::cout << "Current directory:  " << kDir << std::endl;
 	std::string media_file;
 	std::string media_file_stem;
 	//std::string kOutputDataDirectory(kDir + "out/");	// Data output directroy
@@ -104,7 +113,7 @@ int main(int argc, char *argv[]){
 	std::string calib_path="../docs/cameraintrinsics_eye.txt";
 	eye_tracker::UbitrackTextReader<eye_tracker::Caib> ubitrack_calib_text_reader;
 	if (ubitrack_calib_text_reader.read(calib_path) == false){
-		std::cout << "Calibration file onpen error: " << calib_path << std::endl;
+		std::cout << "Calibration file open error: " << calib_path << std::endl;
 		return -1;
 	}
 	cv::Mat K; // Camera intrinsic matrix in OpenCV format
@@ -130,6 +139,8 @@ int main(int argc, char *argv[]){
 	default:
 		break;
 	}
+	std::cout << "Number of cameras:  " << kCameraNums << std::endl;
+
 	
 
 	// Setup of classes that handle monocular/stereo camera setups
@@ -146,32 +157,35 @@ int main(int argc, char *argv[]){
 	try{
 		switch (input_mode)
 		{
-		case InputMode::IMAGE:
+		/*
+		case InputMode::IMAGE: //For static image input
 			eyecams[0] = std::make_unique<eye_tracker::EyeCamera>(media_file, false);
 			eye_model_updaters[0] = std::make_unique<eye_tracker::EyeModelUpdater>(focal_length, 5, 0.5);
 			camera_undistorters[0] = std::make_unique<eye_tracker::CameraUndistorter>(K, distCoeffs);
 			window_names = { "Video/Image" };
 			file_stems = { media_file_stem };
 			break;
-		case InputMode::VIDEO:
+		*/
+		case InputMode::VIDEO: //For fixed video file input
+			std::cout << "InputMode Video" << std::endl;
 			eyecams[0] = std::make_unique<eye_tracker::EyeCamera>(media_file, false);
 			eye_model_updaters[0] = std::make_unique<eye_tracker::EyeModelUpdater>(focal_length, 5, 0.5);
 			camera_undistorters[0] = std::make_unique<eye_tracker::CameraUndistorter>(K, distCoeffs);
 			window_names = { "Video/Image" };
 			file_stems = { media_file_stem };
 			break;
-		case InputMode::CAMERA:
+		case InputMode::CAMERA: //2 Video cameras!
 			camera_indices[0] = 0;
 			camera_indices[1] = 2;
-#if 0
+//#if 0
 			// OpenCV HighGUI frame grabber
-			eyecams[0] = std::make_unique<eye_tracker::EyeCamera>(camera_indices[0], false);
-			eyecams[1] = std::make_unique<eye_tracker::EyeCamera>(camera_indices[1], false);
-#else
+			//eyecams[0] = std::make_unique<eye_tracker::EyeCamera>(camera_indices[0], false);
+			//eyecams[1] = std::make_unique<eye_tracker::EyeCamera>(camera_indices[1], false);
+//#else
 			// DirectShow frame grabber
 			eyecams[0] = std::make_unique<eye_tracker::EyeCameraDS>("Pupil Cam1 ID0");
 			eyecams[1] = std::make_unique<eye_tracker::EyeCameraDS>("Pupil Cam1 ID2");
-#endif
+//#endif
 			eye_model_updaters[0] = std::make_unique<eye_tracker::EyeModelUpdater>(focal_length, 5, 0.5);
 			eye_model_updaters[1] = std::make_unique<eye_tracker::EyeModelUpdater>(focal_length, 5, 0.5);
 			camera_undistorters[0] = std::make_unique<eye_tracker::CameraUndistorter>(K, distCoeffs);
@@ -207,13 +221,13 @@ int main(int argc, char *argv[]){
 	const char kTerminate = 27;//Escape 0x1b
 	bool is_run = true;
 	while (is_run) {
-
 		// Fetch key input
 		char kKEY = 0;
 		if (kVisualization) {
 			kKEY = cv::waitKey(1);
 		}
 		switch (kKEY) {
+		//break loop upon kTerminate key-press
 		case kTerminate:
 			is_run = false;
 			break;
@@ -221,12 +235,14 @@ int main(int argc, char *argv[]){
 
 		// Fetch images
 		for (size_t cam = 0; cam < kCameraNums; cam++) {
+			//TODO: This is where Cameras are not reading anything currently.
 			eyecams[cam]->fetchFrame(images[cam]);
 		}
 		// Process each camera images
 		for (size_t cam = 0; cam < kCameraNums; cam++) {
 			cv::Mat &img = images[cam];
 			if (img.empty()) {
+				std::cout << "Camera ? has no frames to process" << std::endl;
 				//is_run = false;
 				break;
 			}
@@ -239,9 +255,11 @@ int main(int argc, char *argv[]){
 
 			switch (kKEY) {
 			case 'r':
+				//What does this do?
 				eye_model_updaters[cam]->reset();
 				break;
 			case 'p':
+				//What does this do?
 				eye_model_updaters[cam]->add_fitter_max_count(10);
 				break;
 			default:
@@ -252,12 +270,14 @@ int main(int argc, char *argv[]){
 			std::vector<cv::Point2f> inlier_pts;
 			cv::cvtColor(img, img_grey, CV_RGB2GRAY);
 			cv::RotatedRect rr_pf;
+			//Check to see if pupil is found in image
 			bool is_pupil_found = pupilFitter.pupilAreaFitRR(img_grey, rr_pf, inlier_pts);
 
+			//This is where the magic happens to build the 3d model of the eye
 			singleeyefitter::Ellipse2D<double> el = singleeyefitter::toEllipse<double>(eye_tracker::toImgCoordInv(rr_pf, img, 1.0));
 
-			// 3D eye pose estimation
-			bool is_reliable = false;
+			// 3D eye pose estimation and reliability thresholding
+			bool is_reliable = false; 
 			bool is_added = false;
 			const bool force_add = false;
 			const double kReliabilityThreshold = 0.8;// 0.96;
@@ -276,7 +296,6 @@ int main(int argc, char *argv[]){
 
 			// Visualize results
 			if (cam == 0 && kVisualization) {
-
 				// 2D pupil
 				if (is_pupil_found) {
 					cv::ellipse(img_rgb_debug, rr_pf, cv::Vec3b(255, 128, 0), 1);
@@ -302,9 +321,9 @@ int main(int argc, char *argv[]){
 
 		// Compute FPS
 		frame_rate_counter.count();
-		// Print current frame data
+		// Print current frame data for every given number of frames
 		static int ss = 0;
-		if (ss++ > 100) {
+		if (ss++ > 0) {
 			std::cout << "Frame #" << frame_rate_counter.frame_count() << ", FPS=" << frame_rate_counter.fps() << std::endl;
 			ss = 0;
 		}

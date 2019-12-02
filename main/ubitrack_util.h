@@ -303,6 +303,7 @@ public:
 		std::istringstream archive_stream(line);
 		boost::archive::text_iarchive archive(archive_stream);
 		boost::archive::text_oarchive ot(std::cout);
+		ot << "Testing O Archive";
 		ot << t_;
 		ot << data_;
 		try {
