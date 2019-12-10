@@ -299,9 +299,9 @@ bool pupilAreaFitRR(Mat &gray, RotatedRect &rr, vector<Point2f> &allPtsReturn,
 
 
 		///waitKey(1);
-		for (int i = 0; i < allPts.size(); i++) {
-			allPtsReturn.push_back(Point2f(darkestPixelConfirm.x, darkestPixelConfirm.y));
-		}
+		//for (int i = 0; i < allPts.size(); i++) {
+		//	allPtsReturn.push_back(Point2f(darkestPixelConfirm.x, darkestPixelConfirm.y));
+		//}
 		rr = ellipseCorrect;
 		return true;
 	}

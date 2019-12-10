@@ -98,7 +98,7 @@ int main(int argc, char *argv[]){
 				media_file_stem = "test";
 				break;
 			case InputMode::VIDEO:
-				media_file = kDir + "out/test.avi";
+				media_file = kDir + "/utils/eye3.mp4";
 				media_file_stem = "test";
 				break;
 			default:
