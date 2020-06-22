@@ -57,6 +57,7 @@ void record_eyecams_mono_interactive(){
 		//	while (frame_count<kMaxCaptureFrame && cv::waitKey(5) != 'q'){
 
 		// First fetch images
+		//Continuously does this, breaks if have no frame to receive
 		for (size_t cam = 0; cam < kCcameraNums; cam++){
 			eyecams[cam].fetchFrame(images[cam]);
 			if (images[cam].empty()){
@@ -64,11 +65,13 @@ void record_eyecams_mono_interactive(){
 				return;
 			}
 		}
+		//Shows the grabbed frame
 		for (size_t cam = 0; cam < kCcameraNums; cam++){
 			cv::imshow(window_names[cam], images[cam]);
 		}
 		switch (cv::waitKey(5))
 		{
+		//Saves a screen shot when this is pressed
 		case 't':
 		for (size_t cam = 0; cam < kCcameraNums; cam++){
 			ost_frame_id.str("");

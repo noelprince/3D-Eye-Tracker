@@ -98,7 +98,7 @@ int main(int argc, char *argv[]){
 				media_file_stem = "test";
 				break;
 			case InputMode::VIDEO:
-				media_file = kDir + "/utils/eye3.mp4";
+				media_file = kDir + "/utils/eye2.mp4";
 				media_file_stem = "test";
 				break;
 			default:
@@ -110,6 +110,8 @@ int main(int argc, char *argv[]){
 
 	
 	//// Camera intrinsic parameters
+	//I think that the camera_intrinsics file is hard coded for a specific setup.
+	// We want to run the file with a fresh set of intrinsics, or assume a perfect camera with identity intrinsics
 	std::string calib_path="../docs/cameraintrinsics_eye.txt";
 	eye_tracker::UbitrackTextReader<eye_tracker::Caib> ubitrack_calib_text_reader;
 	if (ubitrack_calib_text_reader.read(calib_path) == false){
@@ -248,7 +250,7 @@ int main(int argc, char *argv[]){
 			}
 
 			// Undistort a captured image
-			camera_undistorters[cam]->undistort(img, img);
+			//camera_undistorters[cam]->undistort(img, img);
 
 			cv::Mat img_rgb_debug = img.clone();
 			cv::Mat img_grey;
@@ -285,6 +287,7 @@ int main(int argc, char *argv[]){
 			if (is_pupil_found) {
 				if (eye_model_updaters[cam]->is_model_built()) {
 					ellipse_realiability = eye_model_updaters[cam]->compute_reliability(img, el, inlier_pts);
+					std::cout << "Ellipse reliability: " << ellipse_realiability << "\n";
 					is_reliable = (ellipse_realiability > kReliabilityThreshold);
 					//					is_reliable = true;
 				}
@@ -303,6 +306,7 @@ int main(int argc, char *argv[]){
 
 				// 3D eye ball
 				if (eye_model_updaters[cam]->is_model_built()) {
+					std::cout << "Model built \n";
 					cv::putText(img, "Reliability: " + std::to_string(ellipse_realiability), cv::Point(30, 440), cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(0, 128, 255), 1);
 					if (is_reliable) {
 						eye_model_updaters[cam]->render(img_rgb_debug, el, inlier_pts);

@@ -205,15 +205,22 @@ public:
 	int tan_dis_num;
 	double tan_dis[2];
 	Caib(){
+
+		//I'm not sure what sort of matrices are being built here
+
+		//K is build by creating a list [0.1,1.1,2.1 ... 8.1]
 		for (int k = 0; k < 9; k++){
 			K[k] = k + 0.1;
 		}
 		w = 640;
 		h = 480;
 		rad_dis_num = 6;
+		///Rad_dis is built by [0.2, 1.2 ... 5.2]
 		for (int k = 0; k < rad_dis_num; k++){
 			rad_dis[k] = k + 0.2;
 		}
+		
+		//Tan_dis is [0.3, 1.3]
 		tan_dis_num = 2;
 		for (int k = 0; k < tan_dis_num; k++){
 			tan_dis[k] = k + 0.3;
